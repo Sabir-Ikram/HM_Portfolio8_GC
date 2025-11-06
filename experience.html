@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcours - Mamoun Hicham | Ingénieur en Génie Civil</title>
+    <meta name="description" content="Mon parcours académique et professionnel en génie civil et hydraulique">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#1E3D59',
+                        'steel-blue': '#4A90E2',
+                        'off-white': '#F9FAFB',
+                        'concrete-gray': '#B0BEC5',
+                        'copper-orange': '#E67E22'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .timeline {
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4A90E2, #E67E22);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .timeline-item.animate {
+            animation: timelineSlideIn 0.8s ease forwards;
+        }
+        
+        @keyframes timelineSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .timeline-node {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            background: #E67E22;
+            border: 4px solid white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            z-index: 10;
+        }
+        
+        .timeline-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 55%;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+        }
+        
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            background: #1E3D59;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #E67E22;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 2rem;
+            }
+            
+            .timeline-node {
+                left: 2rem;
+            }
+            
+            .timeline-date {
+                left: 2rem;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 5rem;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-off-white font-inter">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-concrete-gray/20">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="font-poppins font-bold text-xl text-navy">
+                    <a href="index.html">Mamoun Hicham</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-navy hover:text-copper-orange">Accueil</a>
+                    <a href="projects.html" class="nav-link text-navy hover:text-copper-orange">Projets</a>
+                    <a href="skills.html" class="nav-link text-navy hover:text-copper-orange">Compétences</a>
+                    <a href="experience.html" class="nav-link text-navy hover:text-copper-orange active">Parcours</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-32 pb-16 bg-gradient-to-br from-navy to-steel-blue text-white">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="font-poppins font-bold text-5xl mb-6">Mon Parcours</h1>
+            <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                Un parcours académique et professionnel dédié à l'excellence en génie civil 
+                et ingénierie hydraulique, avec une passion pour les infrastructures durables.
+            </p>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-poppins font-bold text-4xl text-navy mb-4">Parcours Académique & Professionnel</h2>
+                <p class="text-concrete-gray text-lg max-w-3xl mx-auto">
+                    5 années de formation spécialisée en génie civil avec une expertise croissante 
+                    en infrastructures et ouvrages hydrauliques.
+                </p>
+            </div>
+            
+            <div class="timeline">
+                
+                <!-- Current Status - 5th Year -->
+                <div class="timeline-item">
+                    <div class="timeline-date">2024-2025</div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="flex items-start space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-copper-orange rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-poppins font-bold text-xl text-navy mb-2">5ème Année - Génie Civil</h3>
+                                <p class="text-steel-blue font-semibold mb-2">Spécialisation : Infrastructures et Ouvrages Hydrauliques</p>
+                                <p class="text-concrete-gray text-sm">École Nationale Supérieure des Ingénieurs (ENSI)</p>
+                            </div>
+                        </div>
+                        <p class="text-concrete-gray leading-relaxed mb-4">
+                            Année finale de spécialisation avec un focus particulier sur les infrastructures hydrauliques durables. 
+                            Réalisation de projets avancés incluant la conception de barrages, systèmes de distribution d'eau 
+                            et gestion des ressources hydriques.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">Projet de fin d'études</span>
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">Recherche appliquée</span>
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">Innovation durable</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internship -->
+                <div class="timeline-item">
+                    <div class="timeline-date">Été 2024</div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="flex items-start space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-poppins font-bold text-xl text-navy mb-2">Stagiaire Ingénieur Hydraulique</h3>
+                                <p class="text-steel-blue font-semibold mb-2">Société Nationale d'Exploitation et de Distribution des Eaux (SONEDE)</p>
+                                <p class="text-concrete-gray text-sm">3 mois - Temps plein</p>
+                            </div>
+                        </div>
+                        <p class="text-concrete-gray leading-relaxed mb-4">
+                            Participation à la modélisation et l'optimisation du réseau de distribution d'eau potable 
+                            pour la région de Sfax. Utilisation d'EPANET pour l'analyse hydraulique et proposition 
+                            d'améliorations pour réduire les pertes d'eau de 15%.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">EPANET</span>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Analyse hydraulique</span>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Optimisation</span>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Gestion des réseaux</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4th Year -->
+                <div class="timeline-item">
+                    <div class="timeline-date">2023-2024</div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="flex items-start space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-steel-blue rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-poppins font-bold text-xl text-navy mb-2">4ème Année - Génie Civil</h3>
+                                <p class="text-steel-blue font-semibold mb-2">Option : Hydraulique et Environnement</p>
+                                <p class="text-concrete-gray text-sm">École Nationale Supérieure des Ingénieurs (ENSI)</p>
+                            </div>
+                        </div>
+                        <p class="text-concrete-gray leading-relaxed mb-4">
+                            Approfondissement des connaissances en hydraulique appliquée avec des projets de conception 
+                            de systèmes de gestion des eaux pluviales, modélisation de canaux d'irrigation et études 
+                            d'impact environnemental.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">SWMM</span>
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">HEC-RAS</span>
+                            <span class="bg-steel-blue/10 text-steel-blue px-3 py-1 rounded-full text-sm font-medium">Analyse environnementale</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3rd Year Project -->
+                <div class="timeline-item">
+                    <div class="timeline-date">2022-2023</div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="flex items-start space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-poppins font-bold text-xl text-navy mb-2">3ème Année - Projet Intégré</h3>
+                                <p class="text-steel-blue font-semibold mb-2">Projet : Conception d'un Pont Hydraulique</p>
+                                <p class="text-concrete-gray text-sm">Réalisé en équipe de 4 étudiants</p>
+                            </div>
+                        </div>
+                        <p class="text-concrete-gray leading-relaxed mb-4">
+                            Conception complète d'un pont-canal pour l'irrigation, incluant l'analyse structurelle, 
+                            l'étude hydraulique et l'optimisation des matériaux. Projet lauréat du concours 
+                            national des projets étudiants en génie civil.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">Conception structurelle</span>
+                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">Analyse hydraulique</span>
+                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">SAP2000</span>
+                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">Prix d'excellence</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- First Two Years -->
+                <div class="timeline-item">
+                    <div class="timeline-date">2020-2022</div>
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="flex items-start space-x-4 mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-poppins font-bold text-xl text-navy mb-2">1ère & 2ème Année</h3>
+                                <p class="text-steel-blue font-semibold mb-2">Cycle Préparatoire Intégré</p>
+                                <p class="text-concrete-gray text-sm">Fondements en sciences de l'ingénieur</p>
+                            </div>
+                        </div>
+                        <p class="text-concrete-gray leading-relaxed mb-4">
+                            Formation solide en mathématiques, physique, mécanique et sciences des matériaux. 
+                            Acquisition des fondamentaux nécessaires pour la spécialisation en génie civil 
+                            avec une moyenne générale de 16.2/20.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">Mathématiques appliquées</span>
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">Mécanique des fluides</span>
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">RDM</span>
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">Mention très bien</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Progress -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-poppins font-bold text-4xl text-navy mb-4">Évolution des Compétences</h2>
+                <p class="text-concrete-gray text-lg max-w-3xl mx-auto">
+                    Progression continue dans le développement des compétences techniques et professionnelles
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center reveal">
+                    <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="progress-ring w-32 h-32" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="8" fill="transparent"/>
+                            <circle cx="60" cy="60" r="50" stroke="#E67E22" stroke-width="8" fill="transparent" 
+                                    stroke-dasharray="314" stroke-dashoffset="31" class="progress-ring-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-navy">90%</span>
+                        </div>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-lg text-navy mb-2">Conception Technique</h3>
+                    <p class="text-concrete-gray text-sm">AutoCAD, Civil 3D, BIM</p>
+                </div>
+                
+                <div class="text-center reveal">
+                    <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="progress-ring w-32 h-32" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="8" fill="transparent"/>
+                            <circle cx="60" cy="60" r="50" stroke="#4A90E2" stroke-width="8" fill="transparent" 
+                                    stroke-dasharray="314" stroke-dashoffset="47" class="progress-ring-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-navy">85%</span>
+                        </div>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-lg text-navy mb-2">Modélisation Hydraulique</h3>
+                    <p class="text-concrete-gray text-sm">EPANET, SWMM, HEC-RAS</p>
+                </div>
+                
+                <div class="text-center reveal">
+                    <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="progress-ring w-32 h-32" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="8" fill="transparent"/>
+                            <circle cx="60" cy="60" r="50" stroke="#10B981" stroke-width="8" fill="transparent" 
+                                    stroke-dasharray="314" stroke-dashoffset="63" class="progress-ring-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-navy">80%</span>
+                        </div>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-lg text-navy mb-2">Gestion de Projet</h3>
+                    <p class="text-concrete-gray text-sm">Planning, équipe, livraison</p>
+                </div>
+                
+                <div class="text-center reveal">
+                    <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="progress-ring w-32 h-32" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" stroke="#E5E7EB" stroke-width="8" fill="transparent"/>
+                            <circle cx="60" cy="60" r="50" stroke="#8B5CF6" stroke-width="8" fill="transparent" 
+                                    stroke-dasharray="314" stroke-dashoffset="94" class="progress-ring-circle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-navy">70%</span>
+                        </div>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-lg text-navy mb-2">Innovation Durable</h3>
+                    <p class="text-concrete-gray text-sm">Environnement, économie circulaire</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-navy text-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="font-poppins font-bold text-4xl mb-6 reveal">Prochaines Étapes</h2>
+            <p class="text-xl text-gray-300 mb-8 reveal">
+                Diplômé en 2025, je cherche des opportunités pour contribuer à des projets d'ingénierie innovants et durables
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
+                <a href="projects.html" class="bg-copper-orange text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-opacity-90 transition-all">
+                    Voir mes réalisations
+                </a>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-navy transition-all">
+                    Télécharger mon CV
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-400">
+                © 2024 Mamoun Hicham. Tous droits réservés. Développé avec passion pour l'ingénierie.
+            </p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

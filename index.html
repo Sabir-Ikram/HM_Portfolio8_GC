@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mamoun Hicham - Ingénieur en Génie Civil | Hydraulique & Infrastructures</title>
+    <meta name="description" content="Portfolio professionnel de Mamoun Hicham, 5ème année Génie Civil spécialisé en Infrastructures et Ouvrages Hydrauliques">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#0A0E27',
+                        'deep-blue': '#1E2749',
+                        'electric-blue': '#3B82F6',
+                        'cyan-bright': '#06B6D4',
+                        'purple-vivid': '#8B5CF6',
+                        'orange-glow': '#F59E0B',
+                        'pink-hot': '#EC4899',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+        
+    </script>
+
+    <style>
+
+
+        * { scroll-behavior: smooth; box-sizing: border-box; }
+        html,body { height: 100%; }
+        body {
+            background: #0A0E27;
+            color: #F1F5F9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            background: linear-gradient(125deg, #0A0E27 0%, #1E2749 50%, #0A0E27 100%);
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(59,130,246,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139,92,246,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(6,182,212,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(236,72,153,0.08) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+            mix-blend-mode: screen;
+        }
+        @keyframes bgShift {
+            0%,100%{ transform: translate(0,0) rotate(0deg); }
+            33%{ transform: translate(30px,-30px) rotate(120deg); }
+            66%{ transform: translate(-30px,30px) rotate(240deg); }
+        }
+
+        /* Glassmorphism & theme styling */
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); }
+        .glass-hover { transition: all .35s cubic-bezier(.2,.8,.2,1); }
+        .glass-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.22); background: rgba(255,255,255,0.04); }
+
+        .gradient-text {
+            background: linear-gradient(135deg,#3B82F6,#8B5CF6,#EC4899);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-size:200% 200%; animation: gradientFlow 5s ease infinite;
+        }
+        @keyframes gradientFlow { 0%,100%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } }
+
+        /* Navigation */
+        .nav-modern { background: rgba(10,14,39,0.8); backdrop-filter: blur(12px); border-bottom:1px solid rgba(255,255,255,0.04); transition: all .25s ease; z-index:60; }
+        .nav-modern.scrolled { background: rgba(10,14,39,0.96); box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
+        .nav-link { position: relative; color: rgba(255,255,255,0.78); transition: all .22s ease; padding:8px 10px; border-radius:8px; font-weight:600; }
+        .nav-link::before { content:''; position:absolute; bottom:-4px; left:50%; transform:translateX(-50%); width:0;height:2px;background:linear-gradient(90deg,#3B82F6,#8B5CF6); transition:width .28s ease; }
+        .nav-link:hover, .nav-link.active { color: #fff; }
+        .nav-link:hover::before, .nav-link.active::before { width:100%; }
+
+        /* Hero */
+        .hero-content { position: relative; z-index: 12; }
+        .hero-badge { background: rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.14); padding:8px 12px; border-radius:999px; display:inline-flex; align-items:center; gap:10px; font-weight:600; color:#8EE0B8; }
+        .pulse-dot { width:8px; height:8px; border-radius:999px; background:#10B981; animation: pulse 2s infinite; display:inline-block; }
+        @keyframes pulse { 0%,100%{ transform:scale(1); opacity:1 } 50%{ transform:scale(1.25); opacity:.55 } }
+
+        .btn-glow { background: linear-gradient(135deg,#3B82F6,#8B5CF6); box-shadow: 0 10px 40px rgba(59,130,246,0.12); color:white; border-radius:14px; padding:12px 18px; font-weight:700; display:inline-flex; gap:10px; align-items:center; position: relative; overflow: hidden; }
+        .btn-glow::before { content:''; position:absolute; left:-80%; top:0; width:80%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); transform: skewX(-12deg); transition:left .6s ease; }
+        .btn-glow:hover::before { left:120%; }
+
+        .btn-outline { border:2px solid rgba(255,255,255,0.06); background:transparent; padding:12px 18px; border-radius:14px; font-weight:700; display:inline-flex; gap:10px; align-items:center; }
+
+        /* Profile area */
+        .profile-wrapper { position: relative; animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-16px) } }
+        .profile-ring { position:absolute; inset:-20px; border-radius:50%; background: linear-gradient(135deg,#3B82F6,#8B5CF6,#EC4899); opacity:0.24; filter: blur(18px); animation: rotate 12s linear infinite; }
+        @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+        /* Cards */
+        .card-modern { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:20px; padding:22px; transition: all .36s cubic-bezier(.2,.8,.2,1); }
+        .card-modern:hover { transform: translateY(-12px); box-shadow: 0 30px 70px rgba(2,6,23,0.6); border-color: rgba(59,130,246,0.16); }
+
+        /* skill tag */
+        .skill-tag { 
+            background: rgba(59,130,246,0.08); 
+            border:1px solid rgba(59,130,246,0.16); 
+            padding:10px 16px; 
+            border-radius:999px; 
+            cursor:pointer; 
+            font-weight:600; 
+            transition: all .24s ease;
+            color: #93C5FD; /* Light blue color for the text */
+            font-size: 0.8rem;
+            display: inline-flex; /* Assurez l'alignement pour le padding */
+            align-items: center;
+        }
+        .skill-tag:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 20px rgba(59,130,246,0.10); }
+
+        /* reveal animation */
+        .reveal { opacity:0; transform: translateY(40px); transition: all .8s cubic-bezier(.2,.9,.2,1); }
+        .reveal.active { opacity:1; transform:none; }
+        
+
+        /* Timeline */
+
+        .timeline {
+        position: relative;
+        padding: 0 0 0 40px;
+        max-width: 850px;
+        margin: 0 auto;
+        z-index: 1;
+        }
+
+        /* Ligne verticale – derrière les points */
+        .timeline::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        background: linear-gradient(to bottom, #3B82F6, #8B5CF6);
+        top: 0;
+        bottom: 0;
+        left: 20px;
+        border-radius: 4px;
+        opacity: 0.8;
+        z-index: 0; /* 🔥 ligne passe derrière les points */
+        }
+
+        /* Carte de timeline */
+        .timeline-item {
+        position: relative;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 20px 26px;
+        margin-left: 30px;
+        margin-bottom: 2.5rem;
+        max-width: 100%;
+        transition: all 0.35s ease;
+        backdrop-filter: blur(10px);
+        z-index: 2; /* carte au-dessus de la ligne */
+        }
+
+        .timeline-item:hover {
+        transform: translateY(-6px);
+        background: rgba(59, 130, 246, 0.06);
+        border-color: rgba(59, 130, 246, 0.25);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Texte */
+        .timeline-item p {
+        line-height: 1.6;
+        color: #cbd5e1;
+        }
+
+        /* Point lumineux (au-dessus de la ligne) */
+        .timeline-item .dot {
+        position: absolute;
+        top: 24px;
+        left: -32px;
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+        border: 4px solid #0A0E27;
+        box-shadow: 0 0 14px rgba(59, 130, 246, 0.8);
+        animation: pulseDot 2.2s infinite ease-in-out;
+        z-index: 5; /* 🔥 point au-dessus de la ligne */
+        }
+
+        @keyframes pulseDot {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        50% {
+            transform: scale(1.25);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+        }
+        }
+
+        /* Animation de révélation fluide */
+        .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
+        }
+        .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+        }
+
+        /* --- Desktop : alternance gauche/droite --- */
+        @media (min-width: 768px) {
+        .timeline {
+            padding: 10px 0;
+        }
+
+        .timeline::after {
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-item {
+            max-width: 46%;
+            margin: 0;
+            margin-bottom: 3rem;
+            padding: 24px 28px;
+        }
+
+        .timeline-item.left {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item.right {
+            left: 54%;
+            text-align: left;
+        }
+
+        /* Points */
+        .timeline-item.left .dot {
+            right: -42px;
+            left: auto;
+        }
+        .timeline-item.right .dot {
+            left: -42px;
+        }
+
+        /* Flèches directionnelles */
+        .timeline-item.left::before,
+        .timeline-item.right::before {
+            content: "";
+            position: absolute;
+            top: 28px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            z-index: 1;
+        }
+
+        .timeline-item.left::before {
+            right: -10px;
+            border-left-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .timeline-item.right::before {
+            left: -10px;
+            border-right-color: rgba(255, 255, 255, 0.06);
+        }
+        }
+
+        /* --- Mobile : une seule colonne --- */
+        @media (max-width: 767px) {
+        .timeline::after {
+            left: 20px;
+        }
+
+        .timeline-item {
+            margin-left: 40px;
+        }
+
+        .timeline-item .dot {
+            left: -28px;
+        }
+        }
+
+
+
+
+        /* Scroll top */
+        .scroll-top { position: fixed; right: 2rem; bottom: 2rem; width:56px; height:56px; border-radius:999px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg,#3B82F6,#8B5CF6); box-shadow: 0 8px 30px rgba(59,130,246,0.16); color:white; transform: translateY(20px); opacity:0; transition: all .28s ease; z-index:80; }
+        .scroll-top.active { transform: translateY(0); opacity:1; }
+
+        /* mobile menu */
+        .mobile-menu { position: fixed; top: 0; right: -100%; width: 80%; max-width:420px; height: 100vh; background: rgba(10,14,39,0.98); backdrop-filter: blur(18px); transition: right .36s cubic-bezier(.2,.9,.2,1); z-index:90; padding:28px; }
+        .mobile-menu.active { right: 0; }
+
+        /* small responsive */
+        @media (max-width: 768px) {
+            .desktop-only { display:none; }
+            .hero-title { font-size: 2.5rem; }
+        }
+
+        /* NEW STYLES FOR SKILLS SECTION */
+        .skill-category {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-category:hover {
+            border-color: rgba(59,130,246,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(2,6,23,0.4);
+        }
+        
+        .skill-category-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .skill-category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.16);
+            transition: all 0.2s ease;
+        }
+        
+        .skill-item:hover {
+            background: rgba(59,130,246,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59,130,246,0.1);
+        }
+        
+        .skill-item-icon {
+            font-size: 0.9rem;
+            color: #3B82F6;
+        }
+        
+        .skill-item-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #93C5FD;
+        }
+        
+        .skill-level {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .skill-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .skill-dot.active {
+            background: #3B82F6;
+        }
+        
+        @media (max-width: 768px) {
+            .skill-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .skill-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.skill-tag:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+    </style>
+</head>
+<body class="font-inter">
+
+    <div class="animated-bg" aria-hidden="true"></div>
+
+    <div id="p5-holder" style="position:fixed; inset:0; z-index:0; pointer-events:none;"></div>
+
+    <button id="scroll-top" class="scroll-top" aria-label="Remonter en haut">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <nav id="navbar" class="nav-modern fixed top-4 left-0 right-0 mx-auto max-w-7xl px-6 py-3 rounded-2xl shadow-sm">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 icon-glow rounded-xl flex items-center justify-center mr-2 bg-gradient-to-r from-electric-blue to-purple-vivid">
+                    <span class="text-white font-bold">MH</span>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="font-poppins font-bold text-lg">Mamoun Hicham</div>
+                    <div class="text-xs text-gray-300">Étudiant Ingénieur en Génie Civil</div>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-6 desktop-only">
+                <a href="#home" class="nav-link active">Accueil</a>
+                <a href="#about" class="nav-link">À propos</a>
+                <a href="#skills" class="nav-link">Compétences</a>
+                <a href="#experience" class="nav-link">Parcours</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="resources/Mamoun_Hicham_CV.pdf" class="btn-glow relative" title="Télécharger mon CV" download>
+                    <i class="fas fa-download"></i>
+                    <span class="ml-2 hidden sm:inline">CV</span>
+                </a>
+
+                <button id="mobile-menu-btn" class="md:hidden text-white text-2xl" aria-label="Ouvrir menu mobile">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <button id="close-menu" class="text-white text-2xl mb-6" aria-label="Fermer le menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <nav class="flex flex-col gap-6 mt-4">
+            <a href="#home" class="text-white text-lg font-semibold">Accueil</a>
+            <a href="#about" class="text-white text-lg font-semibold">À propos</a>
+            <a href="#skills" class="text-white text-lg font-semibold">Compétences</a>
+            <a href="#experience" class="text-white text-lg font-semibold">Parcours</a>
+            <a href="#contact" class="text-white text-lg font-semibold">Contact</a>
+        </nav>
+    </aside>
+
+    <section id="home" class="min-h-screen flex items-center pt-24 pb-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 w-full">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="hero-content">
+                    <div class="hero-badge mb-6 inline-flex items-center">
+                        <span class="pulse-dot"></span>
+                        <span class="ml-3 text-green-200">Recherche de stage PFE (Février 2026)</span>
+                    </div>
+
+                    <h1 class="font-poppins font-extrabold text-5xl md:text-7xl mb-6 leading-tight">
+                        Futur <span class="gradient-text">Ingénieur</span><br/>en Génie Civil
+                    </h1>
+
+                    <div class="text-xl md:text-2xl mb-6 text-gray-300 font-light h-16">
+                        <span id="typed-text"></span>
+                    </div>
+
+                    <p class="text-gray-400 max-w-xl mb-8">
+                        Étudiant en 5ème année, passionné par les **ouvrages hydrauliques**, les **infrastructures** et les ouvrages portuaires[cite: 3, 4].
+                        Je combine expertise technique et rigueur [cite: 5] pour des solutions durables.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 mb-10">
+                        <a href="resources/Mamoun_Hicham_CV.pdf" class="btn-glow relative" download>
+                            <i class="fas fa-download"></i>
+                            <span class="ml-2">Télécharger mon CV</span>
+                        </a>
+                        <a href="#about" class="btn-outline">
+                            <i class="fas fa-eye"></i>
+                            <span class="ml-2">Découvrir mon profil</span>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 max-w-md">
+                        <div class="glass p-4 rounded-xl">
+                            <div class="text-3xl font-extrabold gradient-text">5</div>
+                            <div class="text-gray-300 text-sm mt-1">Année d'études</div>
+                            <div class="text-gray-500 text-xs">Génie Civil [cite: 3]</div>
+                        </div>
+                        <div class="glass p-4 rounded-xl">
+                            <div class="text-3xl font-extrabold gradient-text">2+</div>
+                            <div class="text-gray-300 text-sm mt-1">Ans d'expérience</div>
+                            <div class="text-gray-500 text-xs">Stages réalisés</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="profile-wrapper relative w-80 h-80">
+                        <div class="profile-ring" aria-hidden="true"></div>
+                        <div class="relative w-full h-full rounded-3xl overflow-hidden glass">
+                            <img src="resources/photo.jpg" alt="Photo Mamoun Hicham" class="w-full h-full object-cover"/>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-28 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+             <div class="text-center mb-12 reveal">
+                <h2 class="font-poppins font-bold text-4xl md:text-5xl mb-4">À propos de <span class="gradient-text">moi</span></h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Étudiant en 5ème année de Génie Civil, option **Infrastructures et Ouvrages Hydrauliques** [cite: 3, 24] à l'UEMF[cite: 25].
+                    Je suis à la recherche d'un stage PFE à partir de **Février 2026**.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-modern p-8 reveal">
+                    <div class="w-16 h-16 icon-glow rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-r from-electric-blue to-cyan-bright">
+                        <i class="fas fa-drafting-compass text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-xl mb-3">Compétences Techniques</h3>
+                    <p class="text-gray-400">Expertise dans les domaines clés du Génie Civil : Béton Armé [cite: 50], Ouvrages Hydrauliques [cite: 56], Routes [cite: 58] et Géotechnique[cite: 52].</p>
+                </div>
+
+                <div class="card-modern p-8 reveal">
+                    <div class="w-16 h-16 icon-glow rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-r from-purple-vivid to-pink-hot">
+                        <i class="fas fa-lightbulb text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-xl mb-3">Qualités Personnelles</h3>
+                    <p class="text-gray-400">Motivé, dynamique, rigoureux [cite: 5], je fais preuve d'adaptabilité [cite: 13] et d'un bon sens de la résolution des problèmes[cite: 15].</p>
+                </div>
+
+                <div class="card-modern p-8 reveal">
+                    <div class="w-16 h-16 icon-glow rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-r from-orange-glow to-electric-blue">
+                        <i class="fas fa-tint text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-xl mb-3">Recherche de Stage PFE</h3>
+                    <p class="text-gray-400">Recherche d'un stage de Projet de Fin d'Études de 3 à 6 mois, à partir de **Février 2026** , dans les domaines des infrastructures et ouvrages hydrauliques.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- PROJETS : coller cette section après "À propos" dans index.html -->
+<section id="projects-section" class="py-12 bg-white">
+  <style>
+    /* ===== Styles spécifiques à la section Projets (scopés) ===== */
+    #projects-section { --steel-blue:#4A90E2; --copper:#E67E22; --concrete:#B0BEC5; --navy:#1E3D59; }
+
+    /* reveal animation (correspond à .reveal.active) */
+    #projects-section .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+    #projects-section .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* project card */
+    #projects-section .project-card {
+      transition: all 0.4s ease;
+      cursor: pointer;
+      background: #ffffff;
+      color: #0b1220;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #projects-section .project-card:hover {
+      transform: translateY(-12px) rotateX(5deg);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    }
+    #projects-section .project-card img { display:block; width:100%; height:100%; object-fit:cover; }
+
+    /* filter buttons */
+    #projects-section .filter-btn {
+      transition: all 0.25s ease;
+      border: 2px solid var(--steel-blue);
+      color: var(--steel-blue);
+      background: transparent;
+      padding: .6rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    #projects-section .filter-btn.active {
+      background: var(--copper);
+      color: white;
+      transform: scale(1.04);
+    }
+
+    /* small badge and tech icon */
+    #projects-section .nav-badge { font-size:.85rem; padding:.35rem .6rem; border-radius:999px; font-weight:600; }
+    #projects-section .tech-icon {
+      width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:700; font-size:12px; background:#4A90E2;
+    }
+
+    /* modal */
+    #project-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.78); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+    #project-modal.active { display:flex; }
+    #project-modal .modal-content { background:#fff; color:#0f1724; border-radius:14px; max-width:880px; width:calc(100% - 40px); max-height:90vh; overflow:auto; box-shadow:0 40px 120px rgba(2,6,23,0.6); animation:modalIn .28s ease; }
+    @keyframes modalIn { from{opacity:0; transform:translateY(24px) scale(.98);} to{opacity:1; transform:none;} }
+    #project-modal .close-btn { font-size:26px; line-height:1; cursor:pointer; border:none; background:none; color:#475569; }
+
+    /* responsive tweaks */
+    @media (max-width: 768px) {
+      #projects-section .project-card { min-height: 320px; }
+      #projects-section .h-48 { height: 200px; }
+    }
+  </style>
+
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- filtres -->
+    <div class="flex flex-wrap justify-center gap-4 mb-12 reveal" role="tablist" aria-label="Filtrer les projets">
+      <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">Tous les projets</button>
+      <button class="filter-btn" data-filter="hydraulic" role="tab">Ouvrages Hydrauliques</button>
+      <button class="filter-btn" data-filter="water-management" role="tab">Gestion de l'Eau</button>
+      <button class="filter-btn" data-filter="environmental" role="tab">Environnement</button>
+      <button class="filter-btn" data-filter="structural" role="tab">Structures</button>
+    </div>
+
+    <!-- grille -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid" aria-live="polite">
+      <!-- Project 1: Dam Design -->
+      <article class="project-card reveal" data-category="hydraulic" data-project="dam-design" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 bg-gradient-to-br from-steel-blue to-navy relative overflow-hidden" style="height:12rem;">
+          <img src="resources/hero-hydraulic-engineering.jpg" alt="Conception de barrage">
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge bg-copper text-white" style="background:var(--copper);">Hydraulique</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Conception de Barrage</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité et modélisation des écoulements.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="AutoCAD">AC</div>
+              <div class="tech-icon" title="EPANET">EP</div>
+              <div class="tech-icon" title="Civil 3D">C3D</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2024</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 2: Water Distribution Network -->
+      <article class="project-card reveal" data-category="water-management" data-project="water-network" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 relative overflow-hidden" style="height:12rem;">
+          <img src="resources/water-network-design.jpg" alt="Réseau de distribution d'eau">
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge" style="background:var(--steel-blue); color:white;">Gestion de l'Eau</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Réseau de Distribution</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50,000 habitants avec EPANET.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="EPANET">EP</div>
+              <div class="tech-icon" title="GIS">GIS</div>
+              <div class="tech-icon" title="AutoCAD">AC</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2024</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 3: Water Treatment Plant -->
+      <article class="project-card reveal" data-category="environmental" data-project="treatment-plant" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 relative overflow-hidden" style="height:12rem;">
+          <img src="resources/water-treatment-plant.jpg" alt="Station d'épuration">
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge" style="background:green; color:white;">Environnement</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Station d'Épuration</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Conception d'une station de traitement des eaux usées avec processus biologique avancé et récupération d'énergie.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="Civil 3D">C3D</div>
+              <div class="tech-icon" title="SWMM">SWMM</div>
+              <div class="tech-icon" title="BIM">BIM</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2023</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 4: Bridge Structure -->
+      <article class="project-card reveal" data-category="structural" data-project="bridge-design" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 relative overflow-hidden" style="height:12rem;">
+          <img src="resources/concrete-bridge-project.jpg" alt="Pont routier">
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge" style="background:purple; color:white;">Structures</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Pont Routier</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Conception structurelle d'un pont en béton précontraint avec analyse sismique et étude de fatigue.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="AutoCAD">AC</div>
+              <div class="tech-icon" title="SAP2000">SAP</div>
+              <div class="tech-icon" title="ETABS">ETB</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2023</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 5: Stormwater Management -->
+      <article class="project-card reveal" data-category="water-management" data-project="stormwater" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 relative overflow-hidden" style="height:12rem;">
+          <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+            <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          </div>
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge" style="background:var(--steel-blue); color:white;">Gestion de l'Eau</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Gestion des Eaux Pluviales</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Système de gestion des eaux pluviales pour zone urbaine avec infrastructure de rétention et infiltration.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="SWMM">SWMM</div>
+              <div class="tech-icon" title="GIS">GIS</div>
+              <div class="tech-icon" title="Civil 3D">C3D</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2023</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 6: Hydraulic Channel -->
+      <article class="project-card reveal" data-category="hydraulic" data-project="channel-design" tabindex="0" role="button" aria-pressed="false">
+        <div class="h-48 relative overflow-hidden" style="height:12rem;">
+          <div class="w-full h-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+            <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div class="absolute top-4 right-4">
+            <span class="nav-badge" style="background:var(--copper); color:white;">Hydraulique</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Canal d'Irrigation</h3>
+          <p class="text-concrete-gray mb-4 leading-relaxed">Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime et structures de régulation.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <div class="flex space-x-2">
+              <div class="tech-icon" title="HEC-RAS">HEC</div>
+              <div class="tech-icon" title="AutoCAD">AC</div>
+              <div class="tech-icon" title="Civil 3D">C3D</div>
+            </div>
+            <span class="text-sm" style="color:var(--concrete);">2022</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- modal (global pour la section) -->
+  <div id="project-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <div class="p-8">
+        <div class="flex justify-between items-start mb-6">
+          <h2 id="modal-title" class="font-poppins font-bold text-3xl text-navy">Titre du projet</h2>
+          <button class="close-btn" id="close-modal" aria-label="Fermer la fenêtre">&times;</button>
+        </div>
+
+        <div class="mb-6">
+          <img id="modal-image" src="" alt="Image projet" class="w-full h-64 object-cover rounded-lg">
+        </div>
+
+        <div class="mb-6">
+          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Description du projet</h3>
+          <p id="modal-description" class="text-concrete-gray leading-relaxed"></p>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Outils utilisés</h3>
+          <div id="modal-tools" class="flex flex-wrap gap-3"></div>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Résultats clés</h3>
+          <ul id="modal-results" class="list-disc list-inside text-concrete-gray space-y-2"></ul>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+          <a id="modal-dossier" class="px-6 py-3 border-2 border-steel-blue text-steel-blue rounded-lg font-semibold hover:bg-steel-blue hover:text-white transition-all" target="_blank" rel="noopener noreferrer">Voir le dossier technique</a>
+          <a id="modal-contact" class="px-6 py-3 bg-copper-orange text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all" href="#contact">Contacter à ce sujet</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script autonome: filtres, modal, reveal, clavier -->
+  <script>
+    (function () {
+      const PROJECT_DATA = {
+        "dam-design": {
+          title: "Conception de Barrage",
+          image: "resources/hero-hydraulic-engineering.jpg",
+          description: "Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité, modélisation des écoulements et dimensionnement des ouvrages annexes.",
+          tools: ["AutoCAD", "EPANET", "Civil 3D"],
+          results: ["Étude de stabilité validée", "Réduction de l'érosion aval estimée à 25%", "Document technique et plans d'exécution"],
+          dossier: "resources/dossiers/dam-design-dossier.pdf"
+        },
+        "water-network": {
+          title: "Réseau de Distribution",
+          image: "resources/water-network-design.jpg",
+          description: "Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50 000 habitants en utilisant EPANET et analyse hydraulique fine.",
+          tools: ["EPANET", "GIS", "Excel"],
+          results: ["Perte de charge réduite de 18%", "Plan d'échantillonnage qualité eau", "Fichier EPANET fourni"],
+          dossier: "resources/dossiers/water-network-dossier.pdf"
+        },
+        "treatment-plant": {
+          title: "Station d'Épuration",
+          image: "resources/water-treatment-plant.jpg",
+          description: "Conception d'une station de traitement des eaux usées avec processus biologique avancé, optimisation énergétique et récupération de biogaz.",
+          tools: ["BIM", "SWMM", "Civil 3D"],
+          results: ["Capacité: 10 000 m³/j", "Récupération énergie: 12% des besoins", "Étude d'impact environnemental"],
+          dossier: "resources/dossiers/treatment-plant-dossier.pdf"
+        },
+        "bridge-design": {
+          title: "Pont Routier",
+          image: "resources/concrete-bridge-project.jpg",
+          description: "Conception structurelle d'un pont en béton précontraint, dimensionnement, étude sismique et analyse de fatigue.",
+          tools: ["SAP2000", "ETABS", "AutoCAD"],
+          results: ["Conformité aux normes EN + nationales", "Optimisation section poutres", "Dossier exécution prêt"],
+          dossier: "resources/dossiers/bridge-design-dossier.pdf"
+        },
+        "stormwater": {
+          title: "Gestion des Eaux Pluviales",
+          image: "resources/stormwater.jpg",
+          description: "Système de gestion des eaux pluviales pour zone urbaine avec infrastructures de rétention, infiltration et aménagements paysagers pour réduire le ruissellement.",
+          tools: ["SWMM", "GIS", "Civil 3D"],
+          results: ["Volume de rétention: 8 000 m³", "Réduction ruissellement de 30%", "Plan d'entretien proposé"],
+          dossier: "resources/dossiers/stormwater-dossier.pdf"
+        },
+        "channel-design": {
+          title: "Canal d'Irrigation",
+          image: "resources/canal.jpg",
+          description: "Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime, structures de régulation et dimensionnement des batardeaux.",
+          tools: ["HEC-RAS", "Civil 3D", "AutoCAD"],
+          results: ["Débit transporté stable sous contraintes", "Pertes optimisées", "Plans topo et profils longitudinaux"],
+          dossier: "resources/dossiers/channel-design-dossier.pdf"
+        }
+      };
+
+      const section = document.getElementById('projects-section');
+      const filterBtns = Array.from(section.querySelectorAll('.filter-btn'));
+      const cards = Array.from(section.querySelectorAll('.project-card'));
+      const modal = document.getElementById('project-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalImage = document.getElementById('modal-image');
+      const modalDescription = document.getElementById('modal-description');
+      const modalTools = document.getElementById('modal-tools');
+      const modalResults = document.getElementById('modal-results');
+      const modalDossier = document.getElementById('modal-dossier');
+      const closeModalBtn = document.getElementById('close-modal');
+
+      /* FILTRAGE */
+      function applyFilter(filter) {
+        filterBtns.forEach(b => {
+          const isActive = b.getAttribute('data-filter') === filter;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        cards.forEach(card => {
+          const cat = card.getAttribute('data-category') || '';
+          if (filter === 'all' || cat === filter) {
+            card.style.display = '';
+            card.setAttribute('aria-hidden', 'false');
+          } else {
+            card.style.display = 'none';
+            card.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter')));
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+        });
+      });
+
+      /* REVEAL ON SCROLL - utilise la classe .active (cohérente avec ton CSS) */
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active'); // <-- correction ici
+            entry.target.classList.remove('reveal');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      section.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+      /* OUVERTURE MODAL */
+      function openModalFor(key) {
+        const data = PROJECT_DATA[key];
+        if (!data) return;
+        modalTitle.textContent = data.title;
+        modalImage.src = data.image;
+        modalImage.alt = data.title;
+        modalDescription.textContent = data.description;
+
+        modalTools.innerHTML = '';
+        data.tools.forEach(t => {
+          const d = document.createElement('div');
+          d.className = 'tech-icon';
+          d.textContent = t.length > 6 ? t.slice(0,6) : t;
+          d.title = t;
+          modalTools.appendChild(d);
+        });
+
+        modalResults.innerHTML = '';
+        data.results.forEach(r => {
+          const li = document.createElement('li');
+          li.textContent = r;
+          modalResults.appendChild(li);
+        });
+
+        if (data.dossier) {
+          modalDossier.href = data.dossier;
+          modalDossier.style.display = '';
+        } else {
+          modalDossier.style.display = 'none';
+        }
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        closeModalBtn.focus();
+      }
+
+      cards.forEach(card => {
+        const key = card.getAttribute('data-project');
+        card.addEventListener('click', () => openModalFor(key));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModalFor(key); }
+        });
+      });
+
+      function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        const firstVisible = cards.find(c => c.style.display !== 'none');
+        if (firstVisible) firstVisible.focus();
+      }
+      closeModalBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+      /* initial state */
+      applyFilter('all');
+
+      /* if some reveals are already in viewport on load, force intersection check after small timeout */
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          section.querySelectorAll('.reveal').forEach(el => {
+            try { io.observe(el); } catch (err) { /* ignore */ }
+          });
+        }, 120);
+      });
+    })();
+  </script>
+</section>
+<!-- /PROJETS -->
+
+
+
+   <section id="skills" class="py-28 relative z-10 bg-transparent">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4">
+                Mes <span class="gradient-text">Compétences</span>
+            </h2>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                Ensemble de compétences techniques, logicielles et personnelles développées durant mon parcours d’ingénierie.
+            </p>
+            </div>
+
+            <!-- 🧱 Disposition en colonnes -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- 🧱 COMPÉTENCES TECHNIQUES -->
+            <div class="glass p-8 rounded-2xl hover:shadow-[0_0_25px_rgba(59,130,246,0.25)] transition-all duration-500 reveal">
+                <div class="flex items-center gap-4 mb-6">
+                <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-bright to-electric-blue">
+                    <i class="fas fa-tools text-white text-2xl"></i>
+                </div>
+                <h3 class="font-poppins font-bold text-xl text-cyan-bright">Compétences Techniques</h3>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                <span class="skill-tag"><i class="fas fa-water mr-2 text-cyan-bright"></i>Ouvrages hydrauliques et maritimes</span>
+                <span class="skill-tag"><i class="fas fa-road mr-2 text-cyan-bright"></i>Routes & VRD</span>
+                <span class="skill-tag"><i class="fas fa-tint mr-2 text-cyan-bright"></i>Barrages</span>
+                <span class="skill-tag"><i class="fas fa-train mr-2 text-cyan-bright"></i>Infrastructures ferroviaires</span>
+                <span class="skill-tag"><i class="fas fa-hard-hat mr-2 text-cyan-bright"></i>Béton armé</span>
+                <span class="skill-tag"><i class="fas fa-layer-group mr-2 text-cyan-bright"></i>Béton précontraint</span>
+                <span class="skill-tag"><i class="fas fa-bolt mr-2 text-cyan-bright"></i>Génie parasismique</span>
+                <span class="skill-tag"><i class="fas fa-layer-group mr-2 text-cyan-bright"></i>Structures mixtes</span>
+                <span class="skill-tag"><i class="fas fa-mountain mr-2 text-cyan-bright"></i>Géotechnique</span>
+                <span class="skill-tag"><i class="fas fa-hospital mr-2 text-cyan-bright"></i>Ponts</span>
+                <span class="skill-tag"><i class="fas fa-eye mr-2 text-cyan-bright"></i>Auscultation et réhabilitation</span>
+                </div>
+            </div>
+
+            <!-- 💻 OUTILS INFORMATIQUES -->
+            <div class="glass p-8 rounded-2xl hover:shadow-[0_0_25px_rgba(139,92,246,0.25)] transition-all duration-500 reveal">
+                <div class="flex items-center gap-4 mb-6">
+                <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-vivid to-pink-hot">
+                    <i class="fas fa-laptop-code text-white text-2xl"></i>
+                </div>
+                <h3 class="font-poppins font-bold text-xl text-purple-vivid">Outils Informatiques</h3>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                <span class="skill-tag"><i class="fas fa-cube mr-2 text-purple-vivid"></i>AutoCAD</span>
+                <span class="skill-tag"><i class="fas fa-road mr-2 text-purple-vivid"></i>Covadis / Piste</span>
+                <span class="skill-tag"><i class="fas fa-laptop-code mr-2 text-purple-vivid"></i>Robot Structural Analysis</span>
+                <span class="skill-tag"><i class="fas fa-map-marked-alt mr-2 text-purple-vivid"></i>Global Mapper</span>
+                <span class="skill-tag"><i class="fas fa-water mr-2 text-purple-vivid"></i>Epanet</span>
+                <span class="skill-tag"><i class="fas fa-water mr-2 text-purple-vivid"></i>HEC-RAS</span>
+                <span class="skill-tag"><i class="fas fa-drafting-compass mr-2 text-purple-vivid"></i>Revit</span>
+                <span class="skill-tag"><i class="fas fa-chart-area mr-2 text-purple-vivid"></i>GEO5</span>
+                <span class="skill-tag"><i class="fas fa-map mr-2 text-purple-vivid"></i>ArcGIS</span>
+                <span class="skill-tag"><i class="fas fa-laptop mr-2 text-purple-vivid"></i>Excel (calculs techniques)</span>
+                <span class="skill-tag"><i class="fas fa-globe mr-2 text-purple-vivid"></i>Google Earth</span>
+                </div>
+            </div>
+
+            <!-- 🌟 COMPÉTENCES PERSONNELLES -->
+            <div class="glass p-8 rounded-2xl hover:shadow-[0_0_25px_rgba(245,158,11,0.25)] transition-all duration-500 reveal">
+                <div class="flex items-center gap-4 mb-6">
+                <div class="w-14 h-14 flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-glow to-electric-blue">
+                    <i class="fas fa-user-astronaut text-white text-2xl"></i>
+                </div>
+                <h3 class="font-poppins font-bold text-xl text-orange-glow">Compétences Personnelles</h3>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                <span class="skill-tag"><i class="fas fa-users mr-2 text-orange-glow"></i>Travail d’équipe</span>
+                <span class="skill-tag"><i class="fas fa-comments mr-2 text-orange-glow"></i>Communication</span>
+                <span class="skill-tag"><i class="fas fa-sync-alt mr-2 text-orange-glow"></i>Adaptabilité</span>
+                <span class="skill-tag"><i class="fas fa-lightbulb mr-2 text-orange-glow"></i>Résolution de problèmes</span>
+                <span class="skill-tag"><i class="fas fa-star mr-2 text-orange-glow"></i>Rigueur & Dynamisme</span>
+                <span class="skill-tag"><i class="fas fa-handshake mr-2 text-orange-glow"></i>Esprit d’initiative</span>
+                <span class="skill-tag"><i class="fas fa-brain mr-2 text-orange-glow"></i>Analyse & Esprit critique</span>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section id="experience" class="py-24 relative z-10 bg-transparent">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-14 reveal">
+            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-3">
+                Mon <span class="gradient-text">Parcours</span>
+            </h2>
+            <p class="text-gray-400 text-lg">Mon évolution académique et professionnelle en quelques étapes clés.</p>
+            </div>
+
+            <div class="timeline mt-12 space-y-10">
+
+            <!-- 🏗️ 5ème Année -->
+            <div class="timeline-item left card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                5ᵉ Année du Cycle Ingénieur – <span class="text-purple-vivid">2025 – 2026</span>
+                </div>
+                <div class="text-gray-400 text-sm">UEMF – Option : Infrastructures et Ouvrages Hydrauliques</div>
+                <p class="text-gray-400 mt-2">
+                Finalisation des modules de spécialité (barrages, ports, tunnels). Préparation du Projet de Fin d’Études.
+                </p>
+            </div>
+
+            <!-- 🔧 PFA TGCC -->
+            <div class="timeline-item right card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Stage PFA – <span class="text-cyan-bright">TGCC (Août 2025)</span>
+                </div>
+                <div class="text-gray-400 text-sm">Suivi et contrôle des travaux de gros œuvre – Projet Pôle Sciences & Technologies, UM6P Benguerir.</div>
+                <p class="text-gray-400 mt-2">
+                Suivi quotidien des travaux, contrôle de la conformité des ouvrages, participation aux rapports techniques et aux métrés.
+                </p>
+            </div>
+
+            <!-- ⚙️ PFA SETRAT -->
+            <div class="timeline-item left card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Stage PFA – <span class="text-cyan-bright">SETRAT (Juil. 2025)</span>
+                </div>
+                <div class="text-gray-400 text-sm">Étude géotechnique et structurelle d’un bâtiment R+5.</div>
+                <p class="text-gray-400 mt-2">
+                Dimensionnement des fondations et superstructures en béton armé. Utilisation de GEO5 et Robot Structural Analysis.
+                </p>
+            </div>
+
+            <!-- 🚜 Stage OCP -->
+            <div class="timeline-item right card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Stage – <span class="text-purple-vivid">GROUPE OCP (Août 2024)</span>
+                </div>
+                <div class="text-gray-400 text-sm">Projet LGV TOARC 6 – Benguerir.</div>
+                <p class="text-gray-400 mt-2">
+                Suivi et contrôle des travaux de terrassement, compactage et topographie. Observation des méthodes de fragmentation contrôlée.
+                </p>
+            </div>
+
+            <!-- 🧱 Stage URBAGEC -->
+            <div class="timeline-item left card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Stage – <span class="text-cyan-bright">URBAGEC (Juil.–Août 2023)</span>
+                </div>
+                <div class="text-gray-400 text-sm">Stage en construction – Bureau d’études.</div>
+                <p class="text-gray-400 mt-2">
+                Lecture des plans architecturaux et de coffrage, suivi de chantier et réalisation de dessins techniques sous AutoCAD.
+                </p>
+            </div>
+
+            <!-- 🧰 Stage INTER BTP -->
+            <div class="timeline-item right card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Stage d’Observation – <span class="text-purple-vivid">INTER BTP (Août 2022)</span>
+                </div>
+                <div class="text-gray-400 text-sm">Stage en construction – Hangar militaire, Nouaceur.</div>
+                <p class="text-gray-400 mt-2">
+                Élaboration de plans de coffrage, modélisation de la structure sur Robot Analysis et calculs de ferraillage à l’ELU et ELS.
+                </p>
+            </div>
+
+            <!-- 🎓 Prépa -->
+            <div class="timeline-item left card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Cycle Préparatoire Intégré – <span class="text-cyan-bright">2021 – 2023</span>
+                </div>
+                <div class="text-gray-400 text-sm">UEMF – Formation scientifique et technique.</div>
+                <p class="text-gray-400 mt-2">
+                Acquisition des bases solides en mathématiques, physique et ingénierie. Préparation à l’intégration du cycle ingénieur.
+                </p>
+            </div>
+
+            <!-- 🎓 Bac -->
+            <div class="timeline-item right card-modern reveal">
+                <div class="dot"></div>
+                <div class="font-poppins font-semibold">
+                Baccalauréat Sciences Physiques – <span class="text-purple-vivid">Juin 2021</span>
+                </div>
+                <div class="text-gray-400 text-sm">Lycée Essalam – Mention Très Bien.</div>
+                <p class="text-gray-400 mt-2">
+                Développement d’une rigueur scientifique et d’une méthodologie de travail appliquée à l’ingénierie.
+                </p>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section id="contact" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-8 reveal">
+                <h2 class="font-poppins text-3xl font-bold">Contactez-moi</h2>
+                <p class="text-gray-400">Intéressé par mes compétences ? Discutons de vos projets d'ingénierie</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="reveal">
+                    <div class="card-modern p-6">
+                        <h3 class="font-poppins font-semibold text-xl mb-4">Informations de contact</h3>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-r from-orange-glow to-purple-vivid">
+                                    <i class="fas fa-envelope text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Email</div>
+                                    <div class="text-gray-400">mamounhicham0@gmail.com [cite: 9]</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-r from-orange-glow to-purple-vivid">
+                                    <i class="fas fa-phone text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Téléphone</div>
+                                    <div class="text-gray-400">+212 766 585 710 [cite: 7]</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-r from-orange-glow to-purple-vivid">
+                                    <i class="fas fa-map-marker-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Localisation</div>
+                                    <div class="text-gray-400">Benguerir, Maroc [cite: 10]</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <a href="resources/Mamoun_Hicham_CV.pdf" class="btn-glow" download>
+                                    <i class="fas fa-download"></i>
+                                    <span class="ml-2">Télécharger mon CV</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="contact-form" class="reveal card-modern p-6 space-y-4" onsubmit="event.preventDefault(); handleFormSubmit();">
+                    <div>
+                        <label class="text-gray-300 block mb-2" for="name">Nom</label>
+                        <input id="name" type="text" required class="w-full p-3 rounded-md bg-transparent border border-white/10 placeholder-gray-400 focus:ring-1 focus:ring-electric-blue outline-none transition-shadow" placeholder="Votre nom" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 block mb-2" for="email">Email</label>
+                        <input id="email" type="email" required class="w-full p-3 rounded-md bg-transparent border border-white/10 placeholder-gray-400 focus:ring-1 focus:ring-electric-blue outline-none transition-shadow" placeholder="votre@email.com" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 block mb-2" for="message">Message</label>
+                        <textarea id="message" rows="5" required class="w-full p-3 rounded-md bg-transparent border border-white/10 placeholder-gray-400 focus:ring-1 focus:ring-electric-blue outline-none transition-shadow" placeholder="Décris brièvement ton projet..."></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn-glow w-full">
+                            <i class="fas fa-paper-plane"></i>
+                            <span class="ml-2">Envoyer le message</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-link, a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.hash !== "") {
+                    e.preventDefault();
+                    document.querySelector(this.hash).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (document.getElementById('mobile-menu').classList.contains('active')) {
+                        document.getElementById('mobile-menu').classList.remove('active');
+                    }
+
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Sticky Navbar on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const scrollTop = window.scrollY;
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
+                document.getElementById('scroll-top').classList.add('active');
+            } else {
+                navbar.classList.remove('scrolled');
+                document.getElementById('scroll-top').classList.remove('active');
+            }
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('active');
+        });
+        document.getElementById('close-menu').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.remove('active');
+        });
+
+        // Typed.js initialization
+        var typed = new Typed('#typed-text', {
+            strings: [
+                "Expert en Ouvrages Hydrauliques", 
+                "Spécialiste en Infrastructures Durables", 
+                "Compétent en Modélisation BIM & 3D",
+                "Ingénieur en Génie Civil"
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            backDelay: 2000,
+            loop: true
+        });
+
+        // Reveal Animation on Scroll
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150; 
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    reveals[i].classList.remove("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Call on load
+
+        // Placeholder for Form Submission (replace with actual backend logic)
+        function handleFormSubmit() {
+            alert("Merci ! Votre message a été envoyé (Cette alerte est un placeholder. L'intégration backend réelle est requise).");
+            document.getElementById('contact-form').reset();
+        }
+
+        // p5.js (Code commenté pour utiliser l'animation CSS)
+        /*
+        let particles = [];
+        let numParticles = 30;
+
+        function setup() {
+            let canvas = createCanvas(windowWidth, windowHeight);
+            canvas.parent('p5-holder');
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+            noStroke();
+        }
+
+        function draw() {
+            clear(); 
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].display();
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+
+        class Particle {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.r = random(4, 12);
+                this.xSpeed = random(-0.2, 0.2);
+                this.ySpeed = random(-0.2, 0.2);
+                this.color = color(59, 130, 246, 50); 
+            }
+
+            update() {
+                this.x += this.xSpeed;
+                this.y += this.ySpeed;
+
+                if (this.x > width + this.r || this.x < -this.r) this.x = random(width);
+                if (this.y > height + this.r || this.y < -this.r) this.y = random(height);
+            }
+
+            display() {
+                fill(this.color);
+                ellipse(this.x, this.y, this.r * 2);
+            }
+        }
+        */
+    </script>
+</body>
+</html>
