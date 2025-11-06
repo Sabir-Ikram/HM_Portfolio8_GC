@@ -43,6 +43,32 @@
     <style>
 
 
+
+/* --- FIX: rendre les cartes et la barre de filtres visibles (corrige hover-only issue) --- */
+#projects-section .project-card {
+  /* crée un contexte d'empilement stable (évite que seules les cartes transformées deviennent visibles) */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
+  z-index: 2;               /* au-dessus des canvas/fonds */
+}
+
+/* garder l'effet visuel au hover mais s'assurer que la carte reste au-dessus */
+#projects-section .project-card:hover {
+  z-index: 4;
+}
+
+/* si la barre de filtres a la classe .reveal, on la rend visible immédiatement */
+#projects-section .flex.reveal,
+#projects-section .filter-btn {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important; /* facultatif : évite un clignotement d'animation */
+  z-index: 3;
+}
+
         * { scroll-behavior: smooth; box-sizing: border-box; }
         html,body { height: 100%; }
         body {
