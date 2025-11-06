@@ -153,6 +153,20 @@ function initProjectFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
+    // === Quick fix: s'assurer que les reveals dans #projects-section sont activées au chargement ===
+// (collez ceci dans initProjectFilters() juste après la déclaration de projectCards)
+document.querySelectorAll('#projects-section .reveal').forEach(el => {
+  // si vous voulez garder l'animation, supprimez la ligne qui retire la classe 'reveal'
+  el.classList.add('active');      // rend l'élément visible dès maintenant
+  el.classList.remove('reveal');   // optionnel — enlève la classe d'état caché
+});
+
+// garantir un z-index pour les cartes (par sécurité)
+projectCards.forEach(card => {
+  card.style.zIndex = 2;
+});
+
+
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
