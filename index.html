@@ -43,6 +43,32 @@
     <style>
 
 
+
+/* --- FIX: rendre les cartes et la barre de filtres visibles (corrige hover-only issue) --- */
+#projects-section .project-card {
+  /* crée un contexte d'empilement stable (évite que seules les cartes transformées deviennent visibles) */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
+  z-index: 2;               /* au-dessus des canvas/fonds */
+}
+
+/* garder l'effet visuel au hover mais s'assurer que la carte reste au-dessus */
+#projects-section .project-card:hover {
+  z-index: 4;
+}
+
+/* si la barre de filtres a la classe .reveal, on la rend visible immédiatement */
+#projects-section .flex.reveal,
+#projects-section .filter-btn {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important; /* facultatif : évite un clignotement d'animation */
+  z-index: 3;
+}
+
         * { scroll-behavior: smooth; box-sizing: border-box; }
         html,body { height: 100%; }
         body {
@@ -616,70 +642,528 @@
     </section>
 
 <!-- PROJETS : coller cette section après "À propos" dans index.html -->
-<section id="projects-section" class="py-12 bg-white">
+<!-- PROJETS : coller cette section après "À propos" dans index.html -->
+<section id="projects-section" class="py-28 relative z-10">
   <style>
-    /* ===== Styles spécifiques à la section Projets (scopés) ===== */
-    #projects-section { --steel-blue:#4A90E2; --copper:#E67E22; --concrete:#B0BEC5; --navy:#1E3D59; }
+    /* ===== Styles spécifiques à la section Projets intégrés au thème ===== */
+    #projects-section { 
+      --steel-blue: #3B82F6; 
+      --copper: #F59E0B; 
+      --concrete: #94A3B8; 
+      --navy: #1E2749;
+      --electric-blue: #3B82F6;
+      --cyan-bright: #06B6D4;
+      --purple-vivid: #8B5CF6;
+      --orange-glow: #F59E0B;
+      --pink-hot: #EC4899;
+    }
 
-    /* reveal animation (correspond à .reveal.active) */
-    #projects-section .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
-    #projects-section .reveal.active { opacity: 1; transform: translateY(0); }
+    /* reveal animation */
+    #projects-section .reveal { 
+      opacity: 0; 
+      transform: translateY(30px); 
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    #projects-section .reveal.active { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
 
-    /* project card */
+    /* project card - adaptation au thème sombre */
     #projects-section .project-card {
-      transition: all 0.4s ease;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      background: #ffffff;
-      color: #0b1220;
-      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #F1F5F9;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      backdrop-filter: blur(12px);
+      position: relative;
     }
+    
+    #projects-section .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.05));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 20px;
+    }
+    
     #projects-section .project-card:hover {
-      transform: translateY(-12px) rotateX(5deg);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 
+        0 25px 50px rgba(2, 6, 23, 0.4),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
     }
-    #projects-section .project-card img { display:block; width:100%; height:100%; object-fit:cover; }
+    
+    #projects-section .project-card:hover::before {
+      opacity: 1;
+    }
+    
+    #projects-section .project-card img { 
+      display:block; 
+      width:100%; 
+      height:100%; 
+      object-fit:cover; 
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: brightness(0.9);
+    }
+    
+    #projects-section .project-card:hover img {
+      transform: scale(1.08);
+      filter: brightness(1.1);
+    }
 
-    /* filter buttons */
+    /* filter buttons - style orange amélioré */
     #projects-section .filter-btn {
-      transition: all 0.25s ease;
-      border: 2px solid var(--steel-blue);
-      color: var(--steel-blue);
-      background: transparent;
-      padding: .6rem 1.4rem;
-      border-radius: 999px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid rgba(245, 158, 11, 0.3);
+      color: #FBBF24;
+      background: rgba(245, 158, 11, 0.08);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
       font-weight: 600;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
     }
+    
+    #projects-section .filter-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    #projects-section .filter-btn:hover {
+      background: rgba(245, 158, 11, 0.15);
+      transform: translateY(-3px);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.15);
+    }
+    
+    #projects-section .filter-btn:hover::before {
+      left: 100%;
+    }
+    
     #projects-section .filter-btn.active {
-      background: var(--copper);
+      background: linear-gradient(135deg, #F59E0B, #F97316);
       color: white;
-      transform: scale(1.04);
+      border-color: transparent;
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 
+        0 12px 30px rgba(245, 158, 11, 0.3),
+        0 0 20px rgba(245, 158, 11, 0.2);
     }
 
-    /* small badge and tech icon */
-    #projects-section .nav-badge { font-size:.85rem; padding:.35rem .6rem; border-radius:999px; font-weight:600; }
+    /* NAV-BADGE AVEC COULEURS DIFFÉRENTES PAR TYPE */
+    #projects-section .nav-badge { 
+      font-size: 0.75rem; 
+      padding: 0.35rem 0.8rem; 
+      border-radius: 50px; 
+      font-weight: 600; 
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Couleurs spécifiques pour chaque type de projet */
+    #projects-section .nav-badge.hydraulic {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.3));
+      color: #93C5FD;
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    
+    #projects-section .nav-badge.water-management {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(8, 145, 178, 0.3));
+      color: #7DD3FC;
+      border-color: rgba(6, 182, 212, 0.4);
+    }
+    
+    #projects-section .nav-badge.environmental {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.3));
+      color: #6EE7B7;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    
+    #projects-section .nav-badge.structural {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.3));
+      color: #C4B5FD;
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+    
+    /* TECH-ICON AMÉLIORÉS */
     #projects-section .tech-icon {
-      width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center;
-      color:#fff; font-weight:700; font-size:12px; background:#4A90E2;
+      width: 44px; 
+      height: 44px; 
+      border-radius: 12px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      color: #fff; 
+      font-weight: 700; 
+      font-size: 0.75rem; 
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #projects-section .tech-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    #projects-section .tech-icon:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25));
+      transform: translateY(-4px) scale(1.15);
+      box-shadow: 
+        0 10px 25px rgba(59, 130, 246, 0.3),
+        0 0 15px rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    
+    #projects-section .tech-icon:hover::before {
+      left: 100%;
+    }
+    
+    /* Styles spécifiques pour différents types de logiciels */
+    #projects-section .tech-icon[title*="AutoCAD"],
+    #projects-section .tech-icon[title*="AC"] {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(219, 39, 119, 0.15));
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    
+    #projects-section .tech-icon[title*="EPANET"],
+    #projects-section .tech-icon[title*="EP"] {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15));
+      border-color: rgba(6, 182, 212, 0.3);
+    }
+    
+    #projects-section .tech-icon[title*="Civil"],
+    #projects-section .tech-icon[title*="C3D"] {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    
+    #projects-section .tech-icon[title*="GIS"] {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15));
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    
+    #projects-section .tech-icon[title*="SAP"],
+    #projects-section .tech-icon[title*="ETABS"] {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15));
+      border-color: rgba(239, 68, 68, 0.3);
     }
 
-    /* modal */
-    #project-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.78); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
-    #project-modal.active { display:flex; }
-    #project-modal .modal-content { background:#fff; color:#0f1724; border-radius:14px; max-width:880px; width:calc(100% - 40px); max-height:90vh; overflow:auto; box-shadow:0 40px 120px rgba(2,6,23,0.6); animation:modalIn .28s ease; }
-    @keyframes modalIn { from{opacity:0; transform:translateY(24px) scale(.98);} to{opacity:1; transform:none;} }
-    #project-modal .close-btn { font-size:26px; line-height:1; cursor:pointer; border:none; background:none; color:#475569; }
+    /* modal - design premium amélioré avec z-index corrigé */
+    #project-modal { 
+      display: none; 
+      position: fixed; 
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(2, 6, 23, 0.95); 
+      z-index: 50; /* Z-index inférieur à la navbar (60) */
+      align-items: center; 
+      justify-content: center; 
+      backdrop-filter: blur(15px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      padding-top: 80px; /* Espace pour la navbar */
+    }
+    
+    #project-modal.active { 
+      display: flex;
+      opacity: 1;
+    }
+    
+    #project-modal .modal-content { 
+      background: linear-gradient(145deg, rgba(10, 14, 39, 0.98), rgba(30, 39, 73, 0.95));
+      color: #F1F5F9; 
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px; 
+      max-width: 900px; 
+      width: calc(100% - 40px); 
+      max-height: calc(90vh - 80px); /* Ajustement pour la navbar */
+      overflow: auto; 
+      box-shadow: 
+        0 50px 100px rgba(2, 6, 23, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      backdrop-filter: blur(20px);
+      position: relative;
+      margin-top: 20px; /* Décale légèrement vers le bas */
+      
+      /* SCROLLBAR AMÉLIORÉE POUR LA MODALE */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(59, 130, 246, 0.5) rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Scrollbar personnalisée pour Webkit (Chrome, Safari, Edge) */
+    #project-modal .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    #project-modal .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0 24px 24px 0;
+    }
+    
+    #project-modal .modal-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(139, 92, 246, 0.6));
+      border-radius: 4px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    #project-modal .modal-content::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(139, 92, 246, 0.8));
+    }
+    
+    #project-modal .modal-content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+      border-radius: 24px;
+      pointer-events: none;
+    }
+    
+    @keyframes modalIn { 
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    #project-modal .close-btn { 
+      font-size: 28px; 
+      line-height: 1; 
+      cursor: pointer; 
+      border: none; 
+      background: rgba(255, 255, 255, 0.1);
+      color: #94A3B8;
+      transition: all 0.3s ease;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+    
+    #project-modal .close-btn:hover {
+      background: rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+      transform: rotate(90deg);
+    }
 
+    /* TECH-ICON DANS LA MODALE - VERSION AMÉLIORÉE */
+    #project-modal .modal-tool-item {
+      text-align: center;
+      padding: 1rem 0.75rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 14px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    #project-modal .modal-tool-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    #project-modal .modal-tool-item:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 
+        0 12px 30px rgba(59, 130, 246, 0.25),
+        0 0 20px rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    
+    #project-modal .modal-tool-item:hover::before {
+      left: 100%;
+    }
+    
+    #project-modal .modal-tool-item .tool-name {
+      font-weight: 700;
+      color: #3B82F6;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+    
+    #project-modal .modal-tool-item .tool-type {
+      font-size: 0.7rem;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Améliorations du contenu du modal */
+    #project-modal .modal-content .modal-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-right: 60px; /* Espace pour le bouton fermer */
+    }
+    
+    #project-modal .modal-image-container {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    #project-modal .modal-image-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(transparent, rgba(10, 14, 39, 0.8));
+    }
+    
+    #project-modal .modal-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    #project-modal .modal-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    #project-modal .modal-section h3::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #F59E0B, #3B82F6);
+      border-radius: 4px;
+    }
+    
+    #project-modal .modal-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+    }
+    
+    /* SCROLLBAR POUR TOUT LE SITE - AMÉLIORATION GLOBALE */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(10, 14, 39, 0.8);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(139, 92, 246, 0.6));
+      border-radius: 5px;
+      border: 2px solid rgba(10, 14, 39, 0.8);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(139, 92, 246, 0.8));
+    }
+    
+    /* Pour Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(59, 130, 246, 0.6) rgba(10, 14, 39, 0.8);
+    }
+    
     /* responsive tweaks */
     @media (max-width: 768px) {
       #projects-section .project-card { min-height: 320px; }
       #projects-section .h-48 { height: 200px; }
+      #project-modal {
+        padding-top: 70px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      #project-modal .modal-content {
+        margin: 0;
+        width: 100%;
+        max-height: calc(100vh - 90px);
+      }
+      #projects-section .filter-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      #project-modal .modal-tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 0.75rem;
+      }
+      
+      /* Scrollbar plus fine sur mobile */
+      #project-modal .modal-content::-webkit-scrollbar {
+        width: 4px;
+      }
+      
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
     }
   </style>
 
   <div class="max-w-7xl mx-auto px-6">
+    <!-- En-tête de section -->
+    <div class="text-center mb-16 reveal">
+      <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4">
+        Mes <span class="gradient-text">Projets</span>
+      </h2>
+      <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+        Découvrez une sélection de mes projets académiques et professionnels en génie civil
+      </p>
+    </div>
+
     <!-- filtres -->
     <div class="flex flex-wrap justify-center gap-4 mb-12 reveal" role="tablist" aria-label="Filtrer les projets">
       <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">Tous les projets</button>
@@ -693,22 +1177,22 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid" aria-live="polite">
       <!-- Project 1: Dam Design -->
       <article class="project-card reveal" data-category="hydraulic" data-project="dam-design" tabindex="0" role="button" aria-pressed="false">
-        <div class="h-48 bg-gradient-to-br from-steel-blue to-navy relative overflow-hidden" style="height:12rem;">
+        <div class="h-48 bg-gradient-to-br from-electric-blue/20 to-purple-vivid/20 relative overflow-hidden" style="height:12rem;">
           <img src="resources/hero-hydraulic-engineering.jpg" alt="Conception de barrage">
           <div class="absolute top-4 right-4">
-            <span class="nav-badge bg-copper text-white" style="background:var(--copper);">Hydraulique</span>
+            <span class="nav-badge hydraulic">Hydraulique</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Conception de Barrage</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité et modélisation des écoulements.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Conception de Barrage</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité et modélisation des écoulements.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="AutoCAD">AC</div>
               <div class="tech-icon" title="EPANET">EP</div>
               <div class="tech-icon" title="Civil 3D">C3D</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2024</span>
+            <span class="text-sm text-gray-400">2024</span>
           </div>
         </div>
       </article>
@@ -718,19 +1202,19 @@
         <div class="h-48 relative overflow-hidden" style="height:12rem;">
           <img src="resources/water-network-design.jpg" alt="Réseau de distribution d'eau">
           <div class="absolute top-4 right-4">
-            <span class="nav-badge" style="background:var(--steel-blue); color:white;">Gestion de l'Eau</span>
+            <span class="nav-badge water-management">Gestion de l'Eau</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Réseau de Distribution</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50,000 habitants avec EPANET.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Réseau de Distribution</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50,000 habitants avec EPANET.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="EPANET">EP</div>
               <div class="tech-icon" title="GIS">GIS</div>
               <div class="tech-icon" title="AutoCAD">AC</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2024</span>
+            <span class="text-sm text-gray-400">2024</span>
           </div>
         </div>
       </article>
@@ -740,19 +1224,19 @@
         <div class="h-48 relative overflow-hidden" style="height:12rem;">
           <img src="resources/water-treatment-plant.jpg" alt="Station d'épuration">
           <div class="absolute top-4 right-4">
-            <span class="nav-badge" style="background:green; color:white;">Environnement</span>
+            <span class="nav-badge environmental">Environnement</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Station d'Épuration</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Conception d'une station de traitement des eaux usées avec processus biologique avancé et récupération d'énergie.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Station d'Épuration</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Conception d'une station de traitement des eaux usées avec processus biologique avancé et récupération d'énergie.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="Civil 3D">C3D</div>
               <div class="tech-icon" title="SWMM">SWMM</div>
               <div class="tech-icon" title="BIM">BIM</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2023</span>
+            <span class="text-sm text-gray-400">2023</span>
           </div>
         </div>
       </article>
@@ -762,19 +1246,19 @@
         <div class="h-48 relative overflow-hidden" style="height:12rem;">
           <img src="resources/concrete-bridge-project.jpg" alt="Pont routier">
           <div class="absolute top-4 right-4">
-            <span class="nav-badge" style="background:purple; color:white;">Structures</span>
+            <span class="nav-badge structural">Structures</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Pont Routier</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Conception structurelle d'un pont en béton précontraint avec analyse sismique et étude de fatigue.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Pont Routier</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Conception structurelle d'un pont en béton précontraint avec analyse sismique et étude de fatigue.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="AutoCAD">AC</div>
               <div class="tech-icon" title="SAP2000">SAP</div>
               <div class="tech-icon" title="ETABS">ETB</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2023</span>
+            <span class="text-sm text-gray-400">2023</span>
           </div>
         </div>
       </article>
@@ -782,23 +1266,23 @@
       <!-- Project 5: Stormwater Management -->
       <article class="project-card reveal" data-category="water-management" data-project="stormwater" tabindex="0" role="button" aria-pressed="false">
         <div class="h-48 relative overflow-hidden" style="height:12rem;">
-          <div class="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-            <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          <div class="w-full h-full bg-gradient-to-br from-electric-blue/30 to-cyan-bright/30 flex items-center justify-center">
+            <svg class="w-24 h-24 text-electric-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
           </div>
           <div class="absolute top-4 right-4">
-            <span class="nav-badge" style="background:var(--steel-blue); color:white;">Gestion de l'Eau</span>
+            <span class="nav-badge water-management">Gestion de l'Eau</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Gestion des Eaux Pluviales</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Système de gestion des eaux pluviales pour zone urbaine avec infrastructure de rétention et infiltration.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Gestion des Eaux Pluviales</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Système de gestion des eaux pluviales pour zone urbaine avec infrastructure de rétention et infiltration.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="SWMM">SWMM</div>
               <div class="tech-icon" title="GIS">GIS</div>
               <div class="tech-icon" title="Civil 3D">C3D</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2023</span>
+            <span class="text-sm text-gray-400">2023</span>
           </div>
         </div>
       </article>
@@ -806,23 +1290,23 @@
       <!-- Project 6: Hydraulic Channel -->
       <article class="project-card reveal" data-category="hydraulic" data-project="channel-design" tabindex="0" role="button" aria-pressed="false">
         <div class="h-48 relative overflow-hidden" style="height:12rem;">
-          <div class="w-full h-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
-            <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <div class="w-full h-full bg-gradient-to-br from-cyan-bright/30 to-electric-blue/30 flex items-center justify-center">
+            <svg class="w-24 h-24 text-cyan-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
           </div>
           <div class="absolute top-4 right-4">
-            <span class="nav-badge" style="background:var(--copper); color:white;">Hydraulique</span>
+            <span class="nav-badge hydraulic">Hydraulique</span>
           </div>
         </div>
         <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-poppins font-bold text-xl text-navy mb-3">Canal d'Irrigation</h3>
-          <p class="text-concrete-gray mb-4 leading-relaxed">Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime et structures de régulation.</p>
+          <h3 class="font-poppins font-bold text-xl text-white mb-3">Canal d'Irrigation</h3>
+          <p class="text-gray-400 mb-4 leading-relaxed">Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime et structures de régulation.</p>
           <div class="flex items-center justify-between mt-auto">
             <div class="flex space-x-2">
               <div class="tech-icon" title="HEC-RAS">HEC</div>
               <div class="tech-icon" title="AutoCAD">AC</div>
               <div class="tech-icon" title="Civil 3D">C3D</div>
             </div>
-            <span class="text-sm" style="color:var(--concrete);">2022</span>
+            <span class="text-sm text-gray-400">2022</span>
           </div>
         </div>
       </article>
@@ -832,34 +1316,48 @@
   <!-- modal (global pour la section) -->
   <div id="project-modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
+      <button class="close-btn" id="close-modal" aria-label="Fermer la fenêtre">&times;</button>
       <div class="p-8">
-        <div class="flex justify-between items-start mb-6">
-          <h2 id="modal-title" class="font-poppins font-bold text-3xl text-navy">Titre du projet</h2>
-          <button class="close-btn" id="close-modal" aria-label="Fermer la fenêtre">&times;</button>
+        <div class="modal-header">
+          <div>
+            <h2 id="modal-title" class="font-poppins font-bold text-3xl text-white mb-2">Titre du projet</h2>
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm font-medium">2024</span>
+              <span id="modal-category" class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium">Hydraulique</span>
+            </div>
+          </div>
         </div>
 
-        <div class="mb-6">
-          <img id="modal-image" src="" alt="Image projet" class="w-full h-64 object-cover rounded-lg">
+        <div class="modal-image-container">
+          <img id="modal-image" src="" alt="Image projet" class="w-full h-72 object-cover">
         </div>
 
-        <div class="mb-6">
-          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Description du projet</h3>
-          <p id="modal-description" class="text-concrete-gray leading-relaxed"></p>
+        <div class="modal-section">
+          <h3 class="font-poppins font-semibold text-xl text-white">Description du projet</h3>
+          <p id="modal-description" class="text-gray-300 leading-relaxed text-lg"></p>
         </div>
 
-        <div class="mb-6">
-          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Outils utilisés</h3>
-          <div id="modal-tools" class="flex flex-wrap gap-3"></div>
+        <div class="modal-section">
+          <h3 class="font-poppins font-semibold text-xl text-white mb-4">Outils utilisés</h3>
+          <div id="modal-tools" class="modal-tools-grid"></div>
         </div>
 
-        <div class="mb-6">
-          <h3 class="font-poppins font-semibold text-xl text-navy mb-3">Résultats clés</h3>
-          <ul id="modal-results" class="list-disc list-inside text-concrete-gray space-y-2"></ul>
+        <div class="modal-section">
+          <h3 class="font-poppins font-semibold text-xl text-white mb-4">Résultats clés</h3>
+          <ul id="modal-results" class="text-gray-300 space-y-3">
+            <!-- Les résultats seront ajoutés dynamiquement -->
+          </ul>
         </div>
 
-        <div class="flex justify-end space-x-4">
-          <a id="modal-dossier" class="px-6 py-3 border-2 border-steel-blue text-steel-blue rounded-lg font-semibold hover:bg-steel-blue hover:text-white transition-all" target="_blank" rel="noopener noreferrer">Voir le dossier technique</a>
-          <a id="modal-contact" class="px-6 py-3 bg-copper-orange text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all" href="#contact">Contacter à ce sujet</a>
+        <div class="flex justify-end space-x-4 pt-6 border-t border-white/10">
+          <a id="modal-dossier" class="px-6 py-3 border-2 border-electric-blue text-electric-blue rounded-xl font-semibold hover:bg-electric-blue hover:text-white transition-all duration-300 flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-pdf"></i>
+            Voir le dossier technique
+          </a>
+          <a id="modal-contact" class="px-6 py-3 bg-gradient-to-r from-orange-glow to-electric-blue text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 flex items-center gap-2" href="#contact">
+            <i class="fas fa-envelope"></i>
+            Contacter à ce sujet
+          </a>
         </div>
       </div>
     </div>
@@ -872,50 +1370,92 @@
         "dam-design": {
           title: "Conception de Barrage",
           image: "resources/hero-hydraulic-engineering.jpg",
-          description: "Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité, modélisation des écoulements et dimensionnement des ouvrages annexes.",
-          tools: ["AutoCAD", "EPANET", "Civil 3D"],
-          results: ["Étude de stabilité validée", "Réduction de l'érosion aval estimée à 25%", "Document technique et plans d'exécution"],
-          dossier: "resources/dossiers/dam-design-dossier.pdf"
+          description: "Conception complète d'un barrage en béton gravité avec analyse hydraulique, étude de stabilité, modélisation des écoulements et dimensionnement des ouvrages annexes. Ce projet inclut l'analyse des contraintes structurelles, l'étude d'impact environnemental et la planification de la construction.",
+          tools: ["AutoCAD", "EPANET", "Civil 3D", "HEC-RAS", "Excel"],
+          results: [
+            "Étude de stabilité validée avec coefficient de sécurité > 1.5",
+            "Réduction de l'érosion aval estimée à 25% grâce au bassin de dissipation",
+            "Document technique complet avec plans d'exécution détaillés",
+            "Optimisation des coûts de construction de 15% par rapport au budget initial"
+          ],
+          dossier: "resources/dossiers/dam-design-dossier.pdf",
+          year: "2024",
+          category: "Hydraulique"
         },
         "water-network": {
-          title: "Réseau de Distribution",
+          title: "Réseau de Distribution d'Eau Potable",
           image: "resources/water-network-design.jpg",
-          description: "Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50 000 habitants en utilisant EPANET et analyse hydraulique fine.",
-          tools: ["EPANET", "GIS", "Excel"],
-          results: ["Perte de charge réduite de 18%", "Plan d'échantillonnage qualité eau", "Fichier EPANET fourni"],
-          dossier: "resources/dossiers/water-network-dossier.pdf"
+          description: "Modélisation et optimisation d'un réseau de distribution d'eau potable pour une ville de 50 000 habitants en utilisant EPANET et analyse hydraulique fine. Le projet inclut la conception des conduites, réservoirs et stations de pompage.",
+          tools: ["EPANET", "GIS", "AutoCAD", "Excel", "WaterCAD"],
+          results: [
+            "Perte de charge réduite de 18% grâce à l'optimisation du diamètre des conduites",
+            "Plan d'échantillonnage qualité eau conforme aux normes sanitaires",
+            "Fichier EPANet fourni avec modélisation complète du réseau",
+            "Réduction des coûts d'exploitation de 12%"
+          ],
+          dossier: "resources/dossiers/water-network-dossier.pdf",
+          year: "2024",
+          category: "Gestion de l'Eau"
         },
         "treatment-plant": {
-          title: "Station d'Épuration",
+          title: "Station d'Épuration Moderne",
           image: "resources/water-treatment-plant.jpg",
-          description: "Conception d'une station de traitement des eaux usées avec processus biologique avancé, optimisation énergétique et récupération de biogaz.",
-          tools: ["BIM", "SWMM", "Civil 3D"],
-          results: ["Capacité: 10 000 m³/j", "Récupération énergie: 12% des besoins", "Étude d'impact environnemental"],
-          dossier: "resources/dossiers/treatment-plant-dossier.pdf"
+          description: "Conception d'une station de traitement des eaux usées avec processus biologique avancé, optimisation énergétique et récupération de biogaz. Le projet intègre les dernières technologies de traitement et de monitoring.",
+          tools: ["BIM", "SWMM", "Civil 3D", "Revit", "AutoCAD"],
+          results: [
+            "Capacité de traitement: 10 000 m³/jour",
+            "Récupération énergétique: 12% des besoins totaux",
+            "Étude d'impact environnemental positive",
+            "Système de monitoring en temps réel"
+          ],
+          dossier: "resources/dossiers/treatment-plant-dossier.pdf",
+          year: "2023",
+          category: "Environnement"
         },
         "bridge-design": {
-          title: "Pont Routier",
+          title: "Pont Routier en Béton Précontraint",
           image: "resources/concrete-bridge-project.jpg",
-          description: "Conception structurelle d'un pont en béton précontraint, dimensionnement, étude sismique et analyse de fatigue.",
-          tools: ["SAP2000", "ETABS", "AutoCAD"],
-          results: ["Conformité aux normes EN + nationales", "Optimisation section poutres", "Dossier exécution prêt"],
-          dossier: "resources/dossiers/bridge-design-dossier.pdf"
+          description: "Conception structurelle d'un pont en béton précontraint avec analyse sismique et étude de fatigue. Le projet comprend le dimensionnement complet, les études géotechniques et la planification de construction.",
+          tools: ["SAP2000", "ETABS", "AutoCAD", "Robot", "Excel"],
+          results: [
+            "Conformité aux normes européennes et nationales",
+            "Optimisation de la section des poutres réduisant les coûts de 8%",
+            "Dossier d'exécution complet prêt pour appel d'offres",
+            "Analyse sismique validée par expert indépendant"
+          ],
+          dossier: "resources/dossiers/bridge-design-dossier.pdf",
+          year: "2023",
+          category: "Structures"
         },
         "stormwater": {
-          title: "Gestion des Eaux Pluviales",
+          title: "Gestion des Eaux Pluviales Urbaines",
           image: "resources/stormwater.jpg",
-          description: "Système de gestion des eaux pluviales pour zone urbaine avec infrastructures de rétention, infiltration et aménagements paysagers pour réduire le ruissellement.",
-          tools: ["SWMM", "GIS", "Civil 3D"],
-          results: ["Volume de rétention: 8 000 m³", "Réduction ruissellement de 30%", "Plan d'entretien proposé"],
-          dossier: "resources/dossiers/stormwater-dossier.pdf"
+          description: "Système de gestion des eaux pluviales pour zone urbaine avec infrastructures de rétention, infiltration et aménagements paysagers pour réduire le ruissellement. Intégration des solutions naturelles et techniques.",
+          tools: ["SWMM", "GIS", "Civil 3D", "AutoCAD", "QGIS"],
+          results: [
+            "Volume de rétention: 8 000 m³",
+            "Réduction du ruissellement de 30%",
+            "Plan d'entretien et de maintenance proposé",
+            "Intégration paysagère réussie"
+          ],
+          dossier: "resources/dossiers/stormwater-dossier.pdf",
+          year: "2023",
+          category: "Gestion de l'Eau"
         },
         "channel-design": {
-          title: "Canal d'Irrigation",
+          title: "Canal d'Irrigation Moderne",
           image: "resources/canal.jpg",
-          description: "Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime, structures de régulation et dimensionnement des batardeaux.",
-          tools: ["HEC-RAS", "Civil 3D", "AutoCAD"],
-          results: ["Débit transporté stable sous contraintes", "Pertes optimisées", "Plans topo et profils longitudinaux"],
-          dossier: "resources/dossiers/channel-design-dossier.pdf"
+          description: "Conception d'un canal d'irrigation avec calculs hydrauliques, analyse de régime, structures de régulation et dimensionnement des batardeaux. Optimisation pour l'efficacité hydraulique et la durabilité.",
+          tools: ["HEC-RAS", "Civil 3D", "AutoCAD", "Excel", "Global Mapper"],
+          results: [
+            "Débit transporté stable sous différentes contraintes",
+            "Pertes par infiltration optimisées",
+            "Plans topographiques et profils longitudinaux détaillés",
+            "Structures de régulation automatisées"
+          ],
+          dossier: "resources/dossiers/channel-design-dossier.pdf",
+          year: "2022",
+          category: "Hydraulique"
         }
       };
 
@@ -929,6 +1469,7 @@
       const modalTools = document.getElementById('modal-tools');
       const modalResults = document.getElementById('modal-results');
       const modalDossier = document.getElementById('modal-dossier');
+      const modalCategory = document.getElementById('modal-category');
       const closeModalBtn = document.getElementById('close-modal');
 
       /* FILTRAGE */
@@ -956,12 +1497,11 @@
         });
       });
 
-      /* REVEAL ON SCROLL - utilise la classe .active (cohérente avec ton CSS) */
+      /* REVEAL ON SCROLL */
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('active'); // <-- correction ici
-            entry.target.classList.remove('reveal');
+            entry.target.classList.add('active');
             io.unobserve(entry.target);
           }
         });
@@ -969,40 +1509,51 @@
 
       section.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-      /* OUVERTURE MODAL */
+      /* OUVERTURE MODAL AMÉLIORÉE */
       function openModalFor(key) {
         const data = PROJECT_DATA[key];
         if (!data) return;
+        
         modalTitle.textContent = data.title;
         modalImage.src = data.image;
         modalImage.alt = data.title;
         modalDescription.textContent = data.description;
+        modalCategory.textContent = data.category;
 
+        // Mise à jour des outils avec style amélioré
         modalTools.innerHTML = '';
         data.tools.forEach(t => {
-          const d = document.createElement('div');
-          d.className = 'tech-icon';
-          d.textContent = t.length > 6 ? t.slice(0,6) : t;
-          d.title = t;
-          modalTools.appendChild(d);
+          const toolItem = document.createElement('div');
+          toolItem.className = 'modal-tool-item';
+          toolItem.innerHTML = `
+            <div class="tool-name">${t}</div>
+            <div class="tool-type">Logiciel</div>
+          `;
+          modalTools.appendChild(toolItem);
         });
 
+        // Mise à jour des résultats avec icônes
         modalResults.innerHTML = '';
         data.results.forEach(r => {
           const li = document.createElement('li');
-          li.textContent = r;
+          li.className = 'flex items-start gap-3';
+          li.innerHTML = `
+            <i class="fas fa-check text-green-400 mt-1 flex-shrink-0"></i>
+            <span>${r}</span>
+          `;
           modalResults.appendChild(li);
         });
 
         if (data.dossier) {
           modalDossier.href = data.dossier;
-          modalDossier.style.display = '';
+          modalDossier.style.display = 'flex';
         } else {
           modalDossier.style.display = 'none';
         }
 
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden'; // Empêche le scroll en arrière-plan
         closeModalBtn.focus();
       }
 
@@ -1017,6 +1568,7 @@
       function closeModal() {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = ''; // Réactive le scroll
         const firstVisible = cards.find(c => c.style.display !== 'none');
         if (firstVisible) firstVisible.focus();
       }
@@ -1038,6 +1590,7 @@
     })();
   </script>
 </section>
+<!-- /PROJETS -->
 <!-- /PROJETS -->
 
 
