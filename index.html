@@ -472,16 +472,34 @@
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
 
-            <div class="flex items-center gap-3">
-                <a href="resources/Mamoun_Hicham_CV.pdf" class="btn-glow relative" title="Télécharger mon CV" download>
-                    <i class="fas fa-download"></i>
-                    <span class="ml-2 hidden sm:inline">CV</span>
-                </a>
+           <div class="flex items-center gap-3">
+    <!-- Bouton du CV -->
+               <a href="resources/Mamoun_Hicham_CV.pdf"
+                  id="cv-btn"
+                  class="btn-glow relative flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-300"
+                  title="Voir et télécharger mon CV">
+                   <i class="fas fa-download"></i>
+                   <span class="ml-2 hidden sm:inline">CV</span>
+               </a>
 
-                <button id="mobile-menu-btn" class="md:hidden text-white text-2xl" aria-label="Ouvrir menu mobile">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+               <!-- Bouton du menu mobile -->
+               <button id="mobile-menu-btn"
+                       class="md:hidden text-white text-2xl"
+                       aria-label="Ouvrir menu mobile">
+                   <i class="fas fa-bars"></i>
+               </button>
+           </div>
+
+        <span class="ml-2 hidden sm:inline"></span>
+    </a>
+
+    <!-- Bouton du menu mobile -->
+    <button id="mobile-menu-btn"
+            class="md:hidden text-white text-2xl"
+            aria-label="Ouvrir menu mobile">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
         </div>
     </nav>
 
@@ -1358,7 +1376,22 @@
             backDelay: 2000,
             loop: true
         });
+        document.getElementById('cv-btn').addEventListener('click', function (event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
 
+        // Ouvre le CV dans un nouvel onglet
+        window.open(this.href, '_blank');
+
+        // Déclenche le téléchargement après un court délai (500 ms)
+        setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = this.href;
+            link.download = 'Mamoun_Hicham_CV.pdf'; // nom du fichier téléchargé
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }, 500);
+        });
         // Reveal Animation on Scroll
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
