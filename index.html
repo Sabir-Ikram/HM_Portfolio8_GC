@@ -42,32 +42,70 @@
 
     <style>
 
-
-
-/* --- FIX: rendre les cartes et la barre de filtres visibles (corrige hover-only issue) --- */
-#projects-section .project-card {
-  /* crée un contexte d'empilement stable (évite que seules les cartes transformées deviennent visibles) */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform, opacity;
-  z-index: 2;               /* au-dessus des canvas/fonds */
+/* Indicateur animé sous les titres de section */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 3rem;
 }
 
-/* garder l'effet visuel au hover mais s'assurer que la carte reste au-dessus */
-#projects-section .project-card:hover {
-  z-index: 4;
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* si la barre de filtres a la classe .reveal, on la rend visible immédiatement */
-#projects-section .flex.reveal,
-#projects-section .filter-btn {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important; /* facultatif : évite un clignotement d'animation */
-  z-index: 3;
+.section-title.in-view::after {
+    width: 80px;
 }
+
+/* Animation pour l'indicateur */
+@keyframes slideIn {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 80px;
+        opacity: 1;
+    }
+}
+
+.section-title.in-view::after {
+    animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+      /* --- FIX: rendre les cartes et la barre de filtres visibles (corrige hover-only issue) --- */
+      #projects-section .project-card {
+        /* crée un contexte d'empilement stable (évite que seules les cartes transformées deviennent visibles) */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        will-change: transform, opacity;
+        z-index: 2;               /* au-dessus des canvas/fonds */
+      }
+
+      /* garder l'effet visuel au hover mais s'assurer que la carte reste au-dessus */
+      #projects-section .project-card:hover {
+        z-index: 4;
+      }
+
+      /* si la barre de filtres a la classe .reveal, on la rend visible immédiatement */
+      #projects-section .flex.reveal,
+      #projects-section .filter-btn {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important; /* facultatif : évite un clignotement d'animation */
+        z-index: 3;
+      }
 
         * { scroll-behavior: smooth; box-sizing: border-box; }
         html,body { height: 100%; }
@@ -493,6 +531,7 @@
             <div class="hidden md:flex items-center space-x-6 desktop-only">
                 <a href="#home" class="nav-link active">Accueil</a>
                 <a href="#about" class="nav-link">À propos</a>
+                <a href="#projects-section" class="nav-link">Projets</a>
                 <a href="#skills" class="nav-link">Compétences</a>
                 <a href="#experience" class="nav-link">Parcours</a>
                 <a href="#contact" class="nav-link">Contact</a>
@@ -536,6 +575,7 @@
         <nav class="flex flex-col gap-6 mt-4">
             <a href="#home" class="text-white text-lg font-semibold">Accueil</a>
             <a href="#about" class="text-white text-lg font-semibold">À propos</a>
+            <a href="#projects-section" class="text-white text-lg font-semibold">Projets</a>
             <a href="#skills" class="text-white text-lg font-semibold">Compétences</a>
             <a href="#experience" class="text-white text-lg font-semibold">Parcours</a>
             <a href="#contact" class="text-white text-lg font-semibold">Contact</a>
@@ -606,7 +646,7 @@
     <section id="about" class="py-28 relative z-10">
         <div class="max-w-7xl mx-auto px-6">
              <div class="text-center mb-12 reveal">
-                <h2 class="font-poppins font-bold text-4xl md:text-5xl mb-4">À propos de <span class="gradient-text">moi</span></h2>
+                <h2 class="font-poppins font-bold text-4xl md:text-5xl mb-4 section-title" >À propos de <span class="gradient-text">moi</span></h2>
                 <p class="text-gray-400 text-lg max-w-2xl mx-auto">
                     Étudiant en 5ème année de Génie Civil, option Infrastructures et Ouvrages Hydrauliques à l'UEMF.
                     Je suis à la recherche d'un stage PFE à partir de Février 2026.
@@ -1156,7 +1196,7 @@
   <div class="max-w-7xl mx-auto px-6">
     <!-- En-tête de section -->
     <div class="text-center mb-16 reveal">
-      <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4">
+      <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4 section-title">
         Mes <span class="gradient-text">Projets</span>
       </h2>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -1598,7 +1638,7 @@
    <section id="skills" class="py-28 relative z-10 bg-transparent">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
-            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4">
+            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-4 section-title">
                 Mes <span class="gradient-text">Compétences</span>
             </h2>
             <p class="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -1685,7 +1725,7 @@
     <section id="experience" class="py-24 relative z-10 bg-transparent">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-14 reveal">
-            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-3">
+            <h2 class="font-poppins text-4xl md:text-5xl font-bold mb-3 section-title">
                 Mon <span class="gradient-text">Parcours</span>
             </h2>
             <p class="text-gray-400 text-lg">Mon évolution académique et professionnelle en quelques étapes clés.</p>
@@ -1799,7 +1839,7 @@
     <section id="contact" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-8 reveal">
-                <h2 class="font-poppins text-3xl font-bold">Contactez-moi</h2>
+                <h2 class="font-poppins text-3xl font-bold section-title">Contactez-moi</h2>
                 <p class="text-gray-400">Intéressé par mes compétences ? Discutons de vos projets d'ingénierie</p>
             </div>
 
@@ -1874,6 +1914,59 @@
     </section>
 
     <script>
+        // Animation de l'indicateur sous les titres de section
+        function animateSectionTitles() {
+            const sectionTitles = document.querySelectorAll('.section-title');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, {
+                threshold: 0.5,
+                rootMargin: '-50px 0px -50px 0px'
+            });
+
+            sectionTitles.forEach(title => {
+                observer.observe(title);
+            });
+        }
+
+        // Gestion de la navigation active avec indicateur
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            animateSectionTitles();
+            updateActiveNav();
+        });
+
+        // Écouteur de scroll pour la navigation
+        window.addEventListener('scroll', function() {
+            updateActiveNav();
+        });
         // Smooth scrolling for navigation
         document.querySelectorAll('.nav-link, a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
